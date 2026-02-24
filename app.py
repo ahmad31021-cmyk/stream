@@ -13,6 +13,15 @@ st.caption("Submarine Cables & Pipelines Legal Intelligence Engine")
 
 # Setup OpenAI Client (Works for both Local .env and Streamlit Cloud Secrets)
 api_key = os.getenv("OPENAI_API_KEY") or st.secrets.get("OPENAI_API_KEY")
+
+
+
+if not api_key:
+    st.error("🚨 CRITICAL ERROR: Streamlit ko API Key nahi mil rahi! Secrets check karo.")
+    st.stop()
+
+
+
 client = OpenAI(api_key=api_key)
 
 # ⚠️ Yahan apna actual Assistant ID daalo jo logs mein aata hai
