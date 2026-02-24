@@ -11,18 +11,23 @@ st.set_page_config(page_title="SCAPILE Enterprise", page_icon="⚖️", layout="
 st.title("⚖️ SCAPILE Enterprise AI")
 st.caption("Submarine Cables & Pipelines Legal Intelligence Engine")
 
-# Setup OpenAI Client (Works for both Local .env and Streamlit Cloud Secrets)
-api_key = os.getenv("OPENAI_API_KEY") or st.secrets.get("OPENAI_API_KEY")
+# 🛡️ BULLETPROOF API KEY LOADER
+try:
+    # Pehle Streamlit Cloud ke Secrets se uthane ki koshish karo
+    api_key = st.secrets["OPENAI_API_KEY"]
+except Exception:
+    # Agar fail ho jaye toh local .env file se uthao
+    api_key = os.getenv("OPENAI_API_KEY")
 
-
-
-if not api_key:
-    st.error("🚨 CRITICAL ERROR: Streamlit ko API Key nahi mil rahi! Secrets check karo.")
-    st.stop()
-
-
+# Agar dono jagah se nahi mili toh gracefully error show karo (Crash hone se pehle)
+if not api_key or not api_key.startswith("sk-"):
+    st.error("🚨 CRITICAL ERROR: Streamlit Cloud Secrets mein OPENAI_API_KEY nahi mili ya invalid hai!")
+    st.info("Please go to 'Manage app' -> 'Settings' -> 'Secrets' and add: OPENAI_API_KEY = 'sk-proj-...'")
+    st.stop() # Code ko yahin rok do taake OpenAI ghalat key ke sath hit na ho
 
 client = OpenAI(api_key=api_key)
+
+
 
 # ⚠️ Yahan apna actual Assistant ID daalo jo logs mein aata hai
 ASSISTANT_ID = "asst_6uziJdNAggmJiiUD4jNUF6ej" 
