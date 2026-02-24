@@ -25,6 +25,9 @@ if not api_key or not api_key.startswith("sk-"):
     st.info("Please go to 'Manage app' -> 'Settings' -> 'Secrets' and add: OPENAI_API_KEY = 'sk-proj-...'")
     st.stop() # Code ko yahin rok do taake OpenAI ghalat key ke sath hit na ho
 
+
+clean_api_key = api_key.strip()
+
 client = OpenAI(api_key=api_key)
 
 
